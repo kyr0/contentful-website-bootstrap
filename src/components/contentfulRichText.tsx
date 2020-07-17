@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   BLOCKS,
-  //, MARKS, Document, Block
+  // , MARKS, Document, Block
 } from '@contentful/rich-text-types';
 import {
   documentToReactComponents,
@@ -19,20 +19,19 @@ type Props = {
 function getObjectKeyArray(obj: any): string[] {
   if (typeof obj !== 'object') return [];
   const arr: string[] = [];
-  for (const key in obj) {
-    arr.push(key);
-  }
+
+  Object.keys(obj).forEach((key) => arr.push(key));
   return arr;
 }
 
 const ContentfulRichText: React.FC<Props> = ({ document }: Props) => {
   const options: Options = {
     renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: node => {
+      [BLOCKS.EMBEDDED_ASSET]: (node) => {
         if (!node.data.target.fields) return;
         const { file, description } = node.data.target.fields;
         const locales = getObjectKeyArray(file);
-        return locales.map(locale => (
+        return locales.map((locale) => (
           <img
             src={file[locale].url}
             alt={description[locale]}
